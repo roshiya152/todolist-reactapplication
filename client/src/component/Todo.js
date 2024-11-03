@@ -18,7 +18,7 @@ const Todo = () => {
 
     try {
       const response = await axios.post(
-        "https://todolist-reactapplication.onrender.com",
+        "https://todolist-reactapplication.onrender.com/todos",
         { todo: newTodo },
         {
           headers: {
@@ -45,7 +45,7 @@ const Todo = () => {
 
     try {
       const responseget = await axios.get(
-        "https://todolist-reactapplication.onrender.com",
+        "https://todolist-reactapplication.onrender.com/todos",
         {
           headers: {
             Authorization: `Bearer ${token}`, // Send token in Authorization header
@@ -71,7 +71,7 @@ const Todo = () => {
 
     try {
       // Build the URL based on the filter
-      let url = "https://todolist-reactapplication.onrender.com";
+      let url = "https://todolist-reactapplication.onrender.com/todos";
       if (filter === "completed") {
         url += "?completed=true";
       } else if (filter === "uncompleted") {
