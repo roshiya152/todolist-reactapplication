@@ -88,14 +88,13 @@ const Register = () => {
             </h1>
           )}
           <h1 className=" mt-3 flex items-center justify-center">
-            Please...{" "}
-            <button
+            Please continue to
+<button
               className="bg-green-900  hover:bg-green-800 text-white font-bold py-0 px-1 rounded"
               onClick={() => navigate("/")}
             >
               login
             </button>{" "}
-            ..to continue
           </h1>
         </form>
       </div>
