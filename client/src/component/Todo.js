@@ -206,32 +206,33 @@ const Todo = () => {
         {message && <p className="mt-2 text-red-500">{message}</p>}
       </form>
 
-      <div className="flex flex-wrap space-x-0 space-y-2 sm:space-x-2 sm:space-y-0 mb-4 w-full max-w-lg justify-center sm:justify-start">
-        <button
-          onClick={() => handleFilterChange("all")}
-          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 flex-grow sm:flex-grow-0"
-        >
-          All
-        </button>
-        <button
-          onClick={() => handleFilterChange("completed")}
-          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 flex-grow sm:flex-grow-0"
-        >
-          Completed
-        </button>
-        <button
-          onClick={() => handleFilterChange("uncompleted")}
-          className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 flex-grow sm:flex-grow-0"
-        >
-          Uncompleted
-        </button>
-        <button
-          onClick={() => handleFilterChange("sort")}
-          className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 flex-grow sm:flex-grow-0"
-        >
-          Sort by create date
-        </button>
-      </div>
+     <div className="flex flex-wrap space-x-0 space-y-2 sm:space-x-2 sm:space-y-0 mb-4 w-full max-w-lg justify-center">
+  <button
+    onClick={() => handleFilterChange("all")}
+    className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 flex-grow sm:flex-grow-0 w-full sm:w-auto"
+  >
+    All
+  </button>
+  <button
+    onClick={() => handleFilterChange("completed")}
+    className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 flex-grow sm:flex-grow-0 w-full sm:w-auto"
+  >
+    Completed
+  </button>
+  <button
+    onClick={() => handleFilterChange("uncompleted")}
+    className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 flex-grow sm:flex-grow-0 w-full sm:w-auto"
+  >
+    Uncompleted
+  </button>
+  <button
+    onClick={() => handleFilterChange("sort")}
+    className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 flex-grow sm:flex-grow-0 w-full sm:w-auto"
+  >
+    Sort by create date
+  </button>
+</div>
+
 
       <div className="w-full max-w-lg">
         <h2 className="text-xl font-bold mb-4">Your Todo List</h2>
