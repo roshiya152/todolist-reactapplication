@@ -11,6 +11,8 @@ const Todo = () => {
   const [updatedStatus, setUpdatedStatus] = useState(false);
   const [updatedDate, setUpdatedDate] = useState("");
   const [filter, setFilter] = useState("all");
+  // const [messageColor, setMessageColor] = useState("");
+  const [isSorted, setIsSorted] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,11 +30,11 @@ const Todo = () => {
       );
       console.log("message1", response.data.message);
 
-      setMessage(response.data.message);
+      alert(response.data.message);
       setNewTodo(""); // Clear the input after successful submission
       fetchTodos(); // Fetch the updated todos
     } catch (error) {
-      setMessage(
+      alert(
         "Error: " +
           (error.response ? error.response.data.message : error.message)
       );
@@ -94,6 +96,14 @@ const Todo = () => {
     setFilter(newFilter);
     if (newFilter === "all") {
       setfilteredTodos([]);
+    } else if (newFilter === "sort") {
+      setIsSorted(!isSorted);
+      const sortedTodos = [...todoslist].sort((a, b) => {
+        return isSorted
+          ? new Date(a.date) - new Date(b.date)
+          : new Date(b.date) - new Date(a.date);
+      });
+      setfilteredTodos(sortedTodos);
     } else {
       fetchTodosfilter(newFilter);
     }
@@ -119,7 +129,7 @@ const Todo = () => {
     const token = localStorage.getItem("token"); // Get the token from local storage
 
     try {
-      await axios.delete(
+      const response = await axios.delete(
         `https://todolistreactapp-server.onrender.com/todos/${todoId}`,
         {
           headers: {
@@ -127,7 +137,7 @@ const Todo = () => {
           },
         }
       );
-
+      alert(response.data.message);
       // Fetch the updated todos after deletion
       fetchTodos();
     } catch (error) {
@@ -154,11 +164,12 @@ const Todo = () => {
           },
         }
       );
-      setMessage("Todo updated successfully"); // Show success message
+
+      alert("Todo updated successfully"); // Show success message
       await fetchTodos();
       resetEditing(); // Reset editing state
     } catch (error) {
-      setMessage(
+      alert(
         "Error: " +
           (error.response ? error.response.data.message : error.message)
       ); // Handle error message
@@ -176,7 +187,7 @@ const Todo = () => {
     <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md w-full max-w-md mb-6"
+        className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg mb-6"
       >
         <input
           type="text"
@@ -195,89 +206,97 @@ const Todo = () => {
         {message && <p className="mt-2 text-red-500">{message}</p>}
       </form>
 
-      <div className="flex space-x-2 mb-4">
+      <div className="flex flex-wrap space-x-0 space-y-2 sm:space-x-2 sm:space-y-0 mb-4 w-full max-w-lg justify-center sm:justify-start">
         <button
           onClick={() => handleFilterChange("all")}
-          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 w-full sm:w-auto"
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 flex-grow sm:flex-grow-0"
         >
           All
         </button>
         <button
           onClick={() => handleFilterChange("completed")}
-          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 w-full sm:w-auto"
+          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 flex-grow sm:flex-grow-0"
         >
           Completed
         </button>
         <button
           onClick={() => handleFilterChange("uncompleted")}
-          className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 w-full sm:w-auto"
+          className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 flex-grow sm:flex-grow-0"
         >
           Uncompleted
         </button>
+        <button
+          onClick={() => handleFilterChange("sort")}
+          className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 flex-grow sm:flex-grow-0"
+        >
+          Sort by create date
+        </button>
       </div>
 
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-lg">
         <h2 className="text-xl font-bold mb-4">Your Todo List</h2>
         {displayTodos.length > 0 ? (
-          <table className="min-w-full bg-white shadow-md rounded-lg">
-            <thead>
-              <tr className="bg-gray-200 text-gray-600">
-                <th className="py-2 px-4 border-b border-gray-200 text-left">
-                  Task
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200 text-left">
-                  Completed
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200 text-left">
-                  Date
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200 text-left">
-                  Edit
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200 text-left">
-                  Delete
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayTodos.map((todo) => (
-                <tr key={todo._id} className="hover:bg-gray-100">
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {todo.todo}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {todo.completed ? "Yes" : "No"}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {new Date(todo.date).toLocaleDateString()}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    <button
-                      onClick={() => handleEdit(todo)}
-                      className="text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </button>
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    <button
-                      onClick={() => handleDelete(todo._id)}
-                      className="text-blue-500 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white shadow-md rounded-lg">
+              <thead>
+                <tr className="bg-gray-200 text-gray-600">
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    Task
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    Completed
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    Date
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    Edit
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    Delete
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {displayTodos.map((todo) => (
+                  <tr key={todo._id} className="hover:bg-gray-100">
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {todo.todo}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {todo.completed ? "Yes" : "No"}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {new Date(todo.date).toLocaleDateString()}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      <button
+                        onClick={() => handleEdit(todo)}
+                        className="text-blue-500 hover:underline"
+                      >
+                        Edit
+                      </button>
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      <button
+                        onClick={() => handleDelete(todo._id)}
+                        className="text-blue-500 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <p className="text-gray-600">No todos found</p>
         )}
       </div>
 
       {editingTodo && (
-        <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-md mt-6">
+        <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-lg mt-6">
           <h3 className="text-lg font-bold mb-2">
             Editing Todo: {editingTodo.todo}
           </h3>
@@ -285,7 +304,7 @@ const Todo = () => {
             <label className="mb-1">Your task</label>
             <input
               type="text"
-              value={updatedTodo} // Format the date for the input
+              value={updatedTodo}
               onChange={(e) => setUpdatedTodo(e.target.value)}
               className="border border-gray-300 p-2 rounded-lg mb-4"
             />
@@ -303,7 +322,7 @@ const Todo = () => {
             <label className="mb-1">Date:</label>
             <input
               type="date"
-              value={updatedDate.substring(0, 10)} // Format the date for the input
+              value={updatedDate.substring(0, 10)}
               onChange={(e) => setUpdatedDate(e.target.value)}
               className="border border-gray-300 p-2 rounded-lg mb-4"
             />

@@ -13,7 +13,9 @@ app.use(bodyParser.json());
 
 // MongoDB connectivity
 const cors = require("cors");
-app.use(cors({origin:"https://todolistreactapp-client.onrender.com"}));
+app.use(cors({ origin: "https://todolistreactapp-client.onrender.com" }));
+
+// app.use(cors());
 
 mongoose
   .connect(process.env.MONGO_URI, {

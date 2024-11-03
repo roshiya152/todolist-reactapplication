@@ -5,13 +5,14 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [messageColor, setMessageColor] = useState("");
 
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://todolistreactapp-server.onrender.com/login",
+        "https://todolistreactapp-server.onrender.com/login", //https://todolistreactapp-server.onrender.com
         {
           username,
           password,
@@ -20,17 +21,22 @@ const Login = () => {
 
       // Handle successful login
       setMessage(response.data.message);
+      setUsername("");
+      setPassword("");
+      setMessageColor("green");
 
       localStorage.setItem("token", response.data.token); // Save token for future use
-      navigate("/Todo");
+
+      setTimeout(() => {
+        navigate("/Todo");
+      }, 1000);
     } catch (error) {
       setMessage(
         "Error: " +
           (error.response ? error.response.data.message : error.message)
       );
+      setMessageColor("red");
     }
-    setUsername("");
-    setPassword("");
   };
 
   return (
@@ -78,7 +84,11 @@ const Login = () => {
               login
             </button>
           </div>
-          {message && <h1 className="mt-4 text-center">{message}</h1>}
+          {message && (
+            <h1 style={{ color: messageColor }} className="mt-4 text-center">
+              {message}
+            </h1>
+          )}
 
           <h1 className=" mt-3 flex items-center justify-center">
             Don't have an account?....{" "}

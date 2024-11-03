@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [messageColor, setMessageColor] = useState("");
 
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -17,15 +19,22 @@ const Register = () => {
           password,
         }
       );
+
       setMessage(response.data.message);
+      setMessageColor("green"); // Success message in green
+      setUsername("");
+      setPassword("");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch (error) {
       setMessage(
         "Error: " +
           (error.response ? error.response.data.message : error.message)
       );
+      setMessageColor("red"); // Error message in red
     }
-    setUsername("");
-    setPassword("");
   };
 
   return (
@@ -73,16 +82,20 @@ const Register = () => {
               Register
             </button>
           </div>
-          {message && <h1 className="mt-4 text-center">{message}</h1>}
+          {message && (
+            <h1 style={{ color: messageColor }} className="mt-4 text-center">
+              {message}
+            </h1>
+          )}
           <h1 className=" mt-3 flex items-center justify-center">
-            Please{" "}
+            Please...{" "}
             <button
               className="bg-green-900  hover:bg-green-800 text-white font-bold py-0 px-1 rounded"
               onClick={() => navigate("/")}
             >
               login
             </button>{" "}
-            to continue
+            ..to continue
           </h1>
         </form>
       </div>
