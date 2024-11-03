@@ -13,7 +13,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://todolistreactapp-server.onrender.com/register",
+        "https://todolist-reactapplication.onrender.com/register",
         {
           username,
           password,
